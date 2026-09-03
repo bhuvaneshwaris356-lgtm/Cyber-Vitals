@@ -48,7 +48,7 @@ export function EcgMonitor({ scope }: { scope: Scope }) {
   const critical = scope.riskIndex >= 70;
 
   return (
-    <div className="relative overflow-hidden rounded-lg panel scanline">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-lg panel scanline">
       <div className="flex items-center justify-between border-b border-graphite-line px-4 py-2.5">
         <span className="text-tick text-muted-foreground">Risk ECG · {scope.label}</span>
         <span
@@ -59,7 +59,7 @@ export function EcgMonitor({ scope }: { scope: Scope }) {
         </span>
       </div>
 
-      <div className="relative h-[132px] grid-mesh">
+      <div className="relative min-h-[132px] flex-1 grid-mesh">
         <svg
           viewBox={`0 0 ${beatWidth * beats} ${mid * 2}`}
           preserveAspectRatio="none"
