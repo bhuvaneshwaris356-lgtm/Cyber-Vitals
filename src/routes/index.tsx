@@ -1,24 +1,69 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { PulseHeader } from "@/components/cyber/PulseHeader";
+import { EcgMonitor } from "@/components/cyber/EcgMonitor";
+import { RiskAccordion } from "@/components/cyber/RiskAccordion";
+import { BudgetSimulator } from "@/components/cyber/BudgetSimulator";
+import { DefenseGauges } from "@/components/cyber/DefenseGauges";
+import { ExposureMap } from "@/components/cyber/ExposureMap";
+import { VitalsTerminal } from "@/components/cyber/VitalsTerminal";
+import { ComplianceBadges } from "@/components/cyber/ComplianceBadges";
+import { SCOPES, type ScopeId, type Scope } from "@/lib/cyber-data";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "Cyber Vitals — Cyber Risk Diagnostics Dashboard";
+const DESC =
+  "Read cyber exposure like a patient chart: risk ECG, treatment budget simulator, defence gauges and regional exposure map in ₹ Lakhs and Crores.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const [scopeId, setScopeId] = useState<ScopeId>("enterprise");
+  const scope = useMemo<Scope>(
+    () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[1] as Scope),
+    [scopeId],
+  );
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <PulseHeader scope={scope} onScopeChange={setScopeId} />
+
+      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+        <section aria-label="Risk pulse" className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+          <EcgMonitor scope={scope} />
+          <DefenseGauges scope={scope} />
+        </section>
+
+        <div className="grid gap-6 xl:grid-cols-[1.15fr_1fr]">
+          <RiskAccordion scope={scope} />
+          <BudgetSimulator scope={scope} />
+        </div>
+
+        <ExposureMap scope={scope} />
+
+        <div className="grid gap-6 xl:grid-cols-[1fr_1.15fr]">
+          <VitalsTerminal scope={scope} />
+          <ComplianceBadges />
+        </div>
+      </main>
+
+      <footer className="border-t border-graphite-line px-4 py-6 sm:px-6">
+        <p className="mx-auto max-w-7xl text-xs text-muted-foreground">
+          Cyber Vitals · illustrative figures only, generated locally for demonstration. No live
+          telemetry or customer data is processed.
+        </p>
+      </footer>
     </div>
   );
 }
