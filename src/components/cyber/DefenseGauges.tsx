@@ -9,7 +9,7 @@ function Gauge({
   value: number;
   target: number;
   unit: string;
-  invert?: boolean;
+  invert?: boolean | undefined;
 }) {
   const health = invert
     ? Math.max(0, Math.min(1, target / Math.max(value, 0.001)))
