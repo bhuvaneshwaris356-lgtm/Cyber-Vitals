@@ -10,7 +10,7 @@ const SEV_COLOR: Record<string, string> = {
 };
 
 export function RiskAccordion({ scope }: { scope: Scope }) {
-  const [open, setOpen] = useState<string | null>(RISKS[0].id);
+  const [open, setOpen] = useState<string | null>(RISKS[0]?.id ?? null);
   const factor = scope.exposureCr / 620;
 
   return (
