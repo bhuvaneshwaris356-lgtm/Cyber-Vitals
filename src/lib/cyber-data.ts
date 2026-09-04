@@ -247,3 +247,47 @@ export const SEVERITY_LABEL: Record<string, string> = {
   elevated: "Elevated",
   guarded: "Guarded",
 };
+
+export type RiskTier = "all" | "high" | "moderate" | "low";
+
+/** Clinical severity maps onto the three exposure tiers. */
+export const TIER_OF: Record<string, Exclude<RiskTier, "all">> = {
+  critical: "high",
+  elevated: "moderate",
+  guarded: "low",
+};
+
+export const TIER_LABEL: Record<Exclude<RiskTier, "all">, string> = {
+  high: "HIGH",
+  moderate: "MODERATE",
+  low: "LOW",
+};
+
+export const TIER_COLOR: Record<Exclude<RiskTier, "all">, string> = {
+  high: "var(--rust)",
+  moderate: "var(--amber)",
+  low: "var(--sage)",
+};
+
+export const FAQ = [
+  {
+    id: "eal",
+    q: "How is EAL formulated?",
+    a: "Expected annual loss is EAL = LEF × LM — loss event frequency multiplied by loss magnitude. Both terms are calibrated against Indian enterprise incident benchmarks (CERT-In advisories, sector breach filings and sponsor-bank claim data), so a ₹ figure here reflects observed local recovery, penalty and downtime costs rather than a global average.",
+  },
+  {
+    id: "tiers",
+    q: "What defines the High, Moderate and Low tiers?",
+    a: "High: above ₹1.5 Cr expected annual loss, typically core banking and settlement paths. Moderate: ₹50 Lakhs to ₹1.5 Cr, usually customer data and partner interfaces. Low: below ₹50 Lakhs, confined to internal or non-transactional systems.",
+  },
+  {
+    id: "spend",
+    q: "Why does optimal spend plateau at ₹45 Lakhs?",
+    a: "The treatment curve follows diminishing returns: the first tranche of spend buys segmentation, MFA and restore assurance, which remove the largest loss events. Past roughly ₹45 Lakhs per control domain, each additional rupee reduces residual exposure by less than a rupee of avoided loss, so the marginal ROI crosses one and the curve flattens.",
+  },
+  {
+    id: "regulatory",
+    q: "How does this align with Indian regulation?",
+    a: "Continuous telemetry, tier-0 detection timing and verified restore evidence map directly to the RBI Cyber Security Framework's baseline and SOC expectations, while the risk register, board reporting cadence and third-party attestations map to SEBI CSCRF governance, identification and response functions.",
+  },
+] as const;
