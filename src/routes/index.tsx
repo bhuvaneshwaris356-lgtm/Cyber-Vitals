@@ -8,7 +8,9 @@ import { DefenseGauges } from "@/components/cyber/DefenseGauges";
 import { ExposureMap } from "@/components/cyber/ExposureMap";
 import { VitalsTerminal } from "@/components/cyber/VitalsTerminal";
 import { ComplianceBadges } from "@/components/cyber/ComplianceBadges";
-import { SCOPES, type ScopeId, type Scope } from "@/lib/cyber-data";
+import { RiskFilter } from "@/components/cyber/RiskFilter";
+import { FaqAccordion } from "@/components/cyber/FaqAccordion";
+import { SCOPES, type ScopeId, type Scope, type RiskTier } from "@/lib/cyber-data";
 
 const TITLE = "Cyber Vitals — Cyber Risk Diagnostics Dashboard";
 const DESC =
