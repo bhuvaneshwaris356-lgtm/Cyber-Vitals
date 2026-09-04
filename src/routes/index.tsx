@@ -32,6 +32,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [scopeId, setScopeId] = useState<ScopeId>("enterprise");
+  const [tier, setTier] = useState<RiskTier>("all");
+  const [operator, setOperator] = useState<string | null>(null);
   const scope = useMemo<Scope>(
     () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[1] as Scope),
     [scopeId],
@@ -39,7 +41,13 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PulseHeader scope={scope} onScopeChange={setScopeId} />
+      <PulseHeader
+        scope={scope}
+        onScopeChange={setScopeId}
+        operator={operator}
+        onSignIn={setOperator}
+        onSignOut={() => setOperator(null)}
+      />
 
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
         <section aria-label="Risk pulse" className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
