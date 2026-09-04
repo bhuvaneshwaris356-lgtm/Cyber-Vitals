@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { REGIONS, SEVERITY_LABEL, formatInr, type Region, type Scope } from "@/lib/cyber-data";
+import {
+  REGIONS,
+  SEVERITY_LABEL,
+  TIER_OF,
+  formatInr,
+  type Region,
+  type RiskTier,
+  type Scope,
+} from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
 
 const SEV_COLOR: Record<string, string> = {
@@ -8,7 +16,7 @@ const SEV_COLOR: Record<string, string> = {
   guarded: "var(--vital)",
 };
 
-export function ExposureMap({ scope }: { scope: Scope }) {
+export function ExposureMap({ scope, tier = "all" }: { scope: Scope; tier?: RiskTier }) {
   const [active, setActive] = useState<Region>(REGIONS[0] as Region);
   const factor = scope.exposureCr / 620;
   const maxExp = Math.max(...REGIONS.map((r) => r.exposureCr));
