@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { ChevronDown, Syringe } from "lucide-react";
-import { RISKS, SEVERITY_LABEL, formatInr, type Scope } from "@/lib/cyber-data";
+import {
+  RISKS,
+  SEVERITY_LABEL,
+  TIER_COLOR,
+  TIER_LABEL,
+  TIER_OF,
+  formatInr,
+  type RiskTier,
+  type Scope,
+} from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
 
 const SEV_COLOR: Record<string, string> = {
@@ -9,9 +18,10 @@ const SEV_COLOR: Record<string, string> = {
   guarded: "var(--vital)",
 };
 
-export function RiskAccordion({ scope }: { scope: Scope }) {
+export function RiskAccordion({ scope, tier = "all" }: { scope: Scope; tier?: RiskTier }) {
   const [open, setOpen] = useState<string | null>(RISKS[0]?.id ?? null);
   const factor = scope.exposureCr / 620;
+  const visible = RISKS.filter((r) => tier === "all" || TIER_OF[r.severity] === tier);
 
   return (
     <section aria-labelledby="chart-heading" className="rounded-lg panel">
