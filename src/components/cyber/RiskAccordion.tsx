@@ -62,7 +62,18 @@ export function RiskAccordion({ scope, tier = "all" }: { scope: Scope; tier?: Ri
                     aria-hidden="true"
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{risk.title}</span>
+                    <span className="flex items-center gap-2">
+                      <span className="truncate text-sm font-medium">{risk.title}</span>
+                      <span
+                        className="shrink-0 rounded border px-1.5 py-0.5 font-mono text-[0.625rem] tracking-[0.12em]"
+                        style={{
+                          color: TIER_COLOR[TIER_OF[risk.severity]!],
+                          borderColor: TIER_COLOR[TIER_OF[risk.severity]!],
+                        }}
+                      >
+                        {TIER_LABEL[TIER_OF[risk.severity]!]}
+                      </span>
+                    </span>
                     <span className="mt-0.5 block truncate text-xs text-muted-foreground">
                       {risk.vector}
                     </span>
