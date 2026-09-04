@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { ChevronDown, Syringe } from "lucide-react";
-import { RISKS, SEVERITY_LABEL, formatInr, type Scope } from "@/lib/cyber-data";
+import {
+  RISKS,
+  SEVERITY_LABEL,
+  TIER_COLOR,
+  TIER_LABEL,
+  TIER_OF,
+  formatInr,
+  type RiskTier,
+  type Scope,
+} from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
 
 const SEV_COLOR: Record<string, string> = {
@@ -9,9 +18,10 @@ const SEV_COLOR: Record<string, string> = {
   guarded: "var(--vital)",
 };
 
-export function RiskAccordion({ scope }: { scope: Scope }) {
+export function RiskAccordion({ scope, tier = "all" }: { scope: Scope; tier?: RiskTier }) {
   const [open, setOpen] = useState<string | null>(RISKS[0]?.id ?? null);
   const factor = scope.exposureCr / 620;
+  const visible = RISKS.filter((r) => tier === "all" || TIER_OF[r.severity] === tier);
 
   return (
     <section aria-labelledby="chart-heading" className="rounded-lg panel">
@@ -24,11 +34,13 @@ export function RiskAccordion({ scope }: { scope: Scope }) {
             Diagnoses ranked by annualised loss expectancy · {scope.label}
           </p>
         </div>
-        <span className="text-tick text-muted-foreground">{RISKS.length} findings</span>
+        <span className="text-tick text-muted-foreground">
+          {visible.length} of {RISKS.length} findings
+        </span>
       </div>
 
       <ul className="divide-y divide-border">
-        {RISKS.map((risk) => {
+        {visible.map((risk) => {
           const isOpen = open === risk.id;
           const ale = risk.aleCr * factor;
           return (
@@ -50,7 +62,18 @@ export function RiskAccordion({ scope }: { scope: Scope }) {
                     aria-hidden="true"
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{risk.title}</span>
+                    <span className="flex items-center gap-2">
+                      <span className="truncate text-sm font-medium">{risk.title}</span>
+                      <span
+                        className="shrink-0 rounded border px-1.5 py-0.5 font-mono text-[0.625rem] tracking-[0.12em]"
+                        style={{
+                          color: TIER_COLOR[TIER_OF[risk.severity]!],
+                          borderColor: TIER_COLOR[TIER_OF[risk.severity]!],
+                        }}
+                      >
+                        {TIER_LABEL[TIER_OF[risk.severity]!]}
+                      </span>
+                    </span>
                     <span className="mt-0.5 block truncate text-xs text-muted-foreground">
                       {risk.vector}
                     </span>
