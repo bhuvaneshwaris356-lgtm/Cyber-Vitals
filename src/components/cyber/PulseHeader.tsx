@@ -46,6 +46,9 @@ export function PulseHeader({
           </div>
         </div>
 
+        <div className="flex flex-col items-start gap-4 lg:items-end">
+        <OperatorAccess operator={operator} onSignIn={onSignIn} onSignOut={onSignOut} />
+
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div
             className="flex flex-wrap gap-1 rounded-md border border-graphite-line bg-graphite p-1"
