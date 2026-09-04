@@ -17,10 +17,15 @@ const HELP = [
 let seq = 0;
 const nextId = () => ++seq;
 
+const COMMANDS = ["vitals", "risks", "budget", "defense", "map", "compliance", "help", "clear"];
+
 export function VitalsTerminal({ scope }: { scope: Scope }) {
   const [lines, setLines] = useState<Line[]>([]);
   const [value, setValue] = useState("");
+  const [history, setHistory] = useState<string[]>([]);
+  const [histIdx, setHistIdx] = useState<number | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setLines([
