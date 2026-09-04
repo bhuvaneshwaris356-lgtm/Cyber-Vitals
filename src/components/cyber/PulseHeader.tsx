@@ -98,6 +98,7 @@ export function PulseHeader({
             </div>
           </dl>
         </div>
+        </div>
       </div>
     </header>
   );
