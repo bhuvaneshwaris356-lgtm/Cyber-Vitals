@@ -37,13 +37,17 @@ export function ExposureMap({ scope, tier = "all" }: { scope: Scope; tier?: Risk
           {REGIONS.map((r) => {
             const size = 14 + (r.exposureCr / maxExp) * 26;
             const isActive = active.id === r.id;
+            const matches = tier === "all" || TIER_OF[r.severity] === tier;
             return (
               <button
                 key={r.id}
                 type="button"
                 onClick={() => setActive(r)}
                 aria-pressed={isActive}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--vital)] hover:scale-110"
+                className={cn(
+                  "absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--vital)] hover:scale-110",
+                  !matches && "opacity-20",
+                )}
                 style={{ left: `${r.x}%`, top: `${r.y}%`, width: size, height: size }}
                 title={`${r.name} — ${formatInr(r.exposureCr * factor)}`}
               >

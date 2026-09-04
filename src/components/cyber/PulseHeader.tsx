@@ -1,13 +1,20 @@
 import { Activity, ShieldAlert, Stethoscope } from "lucide-react";
 import { SCOPES, formatInr, type Scope, type ScopeId } from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
+import { OperatorAccess } from "./OperatorAccess";
 
 export function PulseHeader({
   scope,
   onScopeChange,
+  operator,
+  onSignIn,
+  onSignOut,
 }: {
   scope: Scope;
   onScopeChange: (id: ScopeId) => void;
+  operator: string | null;
+  onSignIn: (id: string) => void;
+  onSignOut: () => void;
 }) {
   const beatMs = Math.round(60000 / scope.bpm);
   const critical = scope.riskIndex >= 70;
