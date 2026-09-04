@@ -34,11 +34,13 @@ export function RiskAccordion({ scope, tier = "all" }: { scope: Scope; tier?: Ri
             Diagnoses ranked by annualised loss expectancy · {scope.label}
           </p>
         </div>
-        <span className="text-tick text-muted-foreground">{RISKS.length} findings</span>
+        <span className="text-tick text-muted-foreground">
+          {visible.length} of {RISKS.length} findings
+        </span>
       </div>
 
       <ul className="divide-y divide-border">
-        {RISKS.map((risk) => {
+        {visible.map((risk) => {
           const isOpen = open === risk.id;
           const ale = risk.aleCr * factor;
           return (
