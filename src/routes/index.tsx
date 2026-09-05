@@ -5,6 +5,8 @@ import { EcgMonitor } from "@/components/cyber/EcgMonitor";
 import { RiskAccordion } from "@/components/cyber/RiskAccordion";
 import { BudgetSimulator } from "@/components/cyber/BudgetSimulator";
 import { DefenseGauges } from "@/components/cyber/DefenseGauges";
+import { ControlEffectiveness } from "@/components/cyber/ControlEffectiveness";
+
 import { ExposureMap } from "@/components/cyber/ExposureMap";
 import { VitalsTerminal } from "@/components/cyber/VitalsTerminal";
 import { ComplianceBadges } from "@/components/cyber/ComplianceBadges";
