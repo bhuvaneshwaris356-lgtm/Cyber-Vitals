@@ -1,50 +1,44 @@
 import { useMemo, useState } from "react";
 import { formatInr, type Scope } from "@/lib/cyber-data";
 
-/** Diminishing-returns residual exposure for a given spend multiple of baseline budget. */
-function residual(exposureCr: number, spendCr: number, baselineCr: number) {
-  const intensity = spendCr / baselineCr;
-  return exposureCr * (0.12 + 0.88 * Math.exp(-1.35 * intensity));
+const MAX_CR = 1;
+const OPTIMAL_CR = 0.45;
+const DEFAULT_CR = 0.45;
+
+/** Diminishing-returns residual exposure for a given annual treatment spend (₹ Cr). */
+function residual(exposureCr: number, spendCr: number) {
+  return exposureCr * (0.18 + 0.82 * Math.exp(-4 * spendCr));
 }
 
 const W = 560;
 const H = 220;
-const PAD = { l: 54, r: 16, t: 18, b: 34 };
+const PAD = { l: 58, r: 16, t: 18, b: 34 };
 
 export function BudgetSimulator({ scope }: { scope: Scope }) {
-  const maxSpend = scope.budgetCr * 2.5;
-  const [spend, setSpend] = useState(scope.budgetCr);
-  const [scopeKey, setScopeKey] = useState(scope.id);
+  const [spend, setSpend] = useState(DEFAULT_CR);
 
-  if (scopeKey !== scope.id) {
-    setScopeKey(scope.id);
-    setSpend(scope.budgetCr);
-  }
+  const untreated = scope.exposureCr;
+  const current = residual(untreated, spend);
+  const reduction = ((untreated - current) / untreated) * 100;
 
-  const baseline = residual(scope.exposureCr, 0, scope.budgetCr);
-  const current = residual(scope.exposureCr, spend, scope.budgetCr);
-  const avoided = baseline - current;
-  const roi = spend > 0 ? avoided / spend : 0;
+  const xOf = (s: number) => PAD.l + (s / MAX_CR) * (W - PAD.l - PAD.r);
+  const yOf = (r: number) => PAD.t + (1 - r / untreated) * (H - PAD.t - PAD.b);
 
   const { line, area, marker } = useMemo(() => {
     const pts: [number, number][] = [];
     const steps = 60;
     for (let i = 0; i <= steps; i++) {
-      const s = (i / steps) * maxSpend;
-      const r = residual(scope.exposureCr, s, scope.budgetCr);
-      const x = PAD.l + (i / steps) * (W - PAD.l - PAD.r);
-      const y = PAD.t + (1 - r / scope.exposureCr) * (H - PAD.t - PAD.b);
-      pts.push([x, y]);
+      const s = (i / steps) * MAX_CR;
+      pts.push([xOf(s), yOf(residual(untreated, s))]);
     }
     const d = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
-    const mx = PAD.l + (spend / maxSpend) * (W - PAD.l - PAD.r);
-    const my = PAD.t + (1 - current / scope.exposureCr) * (H - PAD.t - PAD.b);
     return {
       line: d,
       area: `${d} L ${W - PAD.r} ${H - PAD.b} L ${PAD.l} ${H - PAD.b} Z`,
-      marker: [mx, my] as [number, number],
+      marker: [xOf(spend), yOf(current)] as [number, number],
     };
-  }, [scope.exposureCr, scope.budgetCr, maxSpend, spend, current]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [untreated, spend, current]);
 
   return (
     <section aria-labelledby="sim-heading" className="rounded-lg panel">
@@ -53,7 +47,7 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
           Treatment cost simulator
         </h2>
         <p className="text-xs text-muted-foreground">
-          Move the dose to see residual exposure and return on spend
+          Move the dose between ₹0 and ₹1.00 Cr to see residual exposure and risk reduction
         </p>
       </div>
 
@@ -61,9 +55,9 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
         <div>
           <div className="flex items-end justify-between gap-3">
             <label htmlFor="spend" className="text-tick text-muted-foreground">
-              Annual security spend
+              Annual treatment spend
             </label>
-            <output htmlFor="spend" className="font-mono text-lg" style={{ color: "var(--vital)" }}>
+            <output htmlFor="spend" className="font-mono text-lg" style={{ color: "var(--copper)" }}>
               {formatInr(spend)}
             </output>
           </div>
@@ -71,15 +65,15 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
             id="spend"
             type="range"
             min={0}
-            max={Number(maxSpend.toFixed(2))}
-            step={Number((maxSpend / 100).toFixed(2))}
+            max={MAX_CR}
+            step={0.01}
             value={spend}
             onChange={(e) => setSpend(Number(e.target.value))}
-            className="mt-3 h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-[var(--vital)]"
+            className="mt-3 h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-[var(--copper)]"
             aria-describedby="spend-hint"
           />
           <p id="spend-hint" className="mt-2 text-xs text-muted-foreground">
-            Baseline plan is {formatInr(scope.budgetCr)} · ceiling {formatInr(maxSpend)}
+            Optimal dose is locked at {formatInr(OPTIMAL_CR)} · ceiling {formatInr(MAX_CR)}
           </p>
         </div>
 
@@ -88,7 +82,7 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
             viewBox={`0 0 ${W} ${H}`}
             className="h-auto w-full"
             role="img"
-            aria-label={`Residual exposure falls to ${formatInr(current)} at a spend of ${formatInr(spend)}`}
+            aria-label={`Residual expected annual loss falls to ${formatInr(current)} at a spend of ${formatInr(spend)}, a ${reduction.toFixed(0)} percent reduction`}
           >
             <defs>
               <linearGradient id="cv-area" x1="0" y1="0" x2="0" y2="1">
@@ -101,14 +95,7 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
               const y = PAD.t + f * (H - PAD.t - PAD.b);
               return (
                 <g key={f}>
-                  <line
-                    x1={PAD.l}
-                    x2={W - PAD.r}
-                    y1={y}
-                    y2={y}
-                    stroke="var(--graphite-line)"
-                    strokeWidth="1"
-                  />
+                  <line x1={PAD.l} x2={W - PAD.r} y1={y} y2={y} stroke="var(--graphite-line)" strokeWidth="1" />
                   <text
                     x={PAD.l - 8}
                     y={y + 3.5}
@@ -117,7 +104,7 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
                     fontSize="9"
                     fontFamily="var(--font-mono)"
                   >
-                    {formatInr(scope.exposureCr * (1 - f))}
+                    {formatInr(untreated * (1 - f))}
                   </text>
                 </g>
               );
@@ -125,6 +112,25 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
 
             <path d={area} fill="url(#cv-area)" />
             <path d={line} fill="none" stroke="var(--alarm)" strokeWidth="2.2" />
+
+            <line
+              x1={xOf(OPTIMAL_CR)}
+              x2={xOf(OPTIMAL_CR)}
+              y1={PAD.t - 6}
+              y2={H - PAD.b}
+              stroke="var(--copper)"
+              strokeWidth="1.4"
+            />
+            <text
+              x={xOf(OPTIMAL_CR) + 6}
+              y={PAD.t + 4}
+              fill="var(--copper)"
+              fontSize="9"
+              fontFamily="var(--font-mono)"
+            >
+              ₹45 Lakhs · OPTIMAL
+            </text>
+
             <line
               x1={marker[0]}
               x2={marker[0]}
@@ -134,21 +140,9 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
               strokeDasharray="3 4"
               strokeWidth="1.2"
             />
-            <circle
-              cx={marker[0]}
-              cy={marker[1]}
-              r="5"
-              fill="var(--vital)"
-              stroke="var(--obsidian)"
-              strokeWidth="2"
-            />
-            <text
-              x={PAD.l}
-              y={H - 12}
-              fill="var(--muted-foreground)"
-              fontSize="9"
-              fontFamily="var(--font-mono)"
-            >
+            <circle cx={marker[0]} cy={marker[1]} r="5" fill="var(--vital)" stroke="var(--obsidian)" strokeWidth="2" />
+
+            <text x={PAD.l} y={H - 12} fill="var(--muted-foreground)" fontSize="9" fontFamily="var(--font-mono)">
               ₹0
             </text>
             <text
@@ -159,28 +153,28 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
               fontSize="9"
               fontFamily="var(--font-mono)"
             >
-              {formatInr(maxSpend)} spend
+              ₹1.00 Cr spend
             </text>
           </svg>
         </div>
 
         <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-md bg-graphite-line sm:grid-cols-3">
           <div className="bg-card px-4 py-3">
-            <dt className="text-tick text-muted-foreground">Residual exposure</dt>
+            <dt className="text-tick text-muted-foreground">Allocated budget</dt>
+            <dd className="mt-1 font-mono text-base" style={{ color: "var(--copper)" }}>
+              {formatInr(spend)}
+            </dd>
+          </div>
+          <div className="bg-card px-4 py-3">
+            <dt className="text-tick text-muted-foreground">Residual EAL</dt>
             <dd className="mt-1 font-mono text-base" style={{ color: "var(--alarm)" }}>
               {formatInr(current)}
             </dd>
           </div>
           <div className="bg-card px-4 py-3">
-            <dt className="text-tick text-muted-foreground">Loss avoided</dt>
-            <dd className="mt-1 font-mono text-base" style={{ color: "var(--vital)" }}>
-              {formatInr(avoided)}
-            </dd>
-          </div>
-          <div className="bg-card px-4 py-3">
-            <dt className="text-tick text-muted-foreground">Return per ₹1</dt>
-            <dd className="mt-1 font-mono text-base" style={{ color: "var(--gold)" }}>
-              {roi.toFixed(2)}x
+            <dt className="text-tick text-muted-foreground">Risk reduction</dt>
+            <dd className="mt-1 font-mono text-base" style={{ color: "var(--sage)" }}>
+              {reduction.toFixed(1)}%
             </dd>
           </div>
         </dl>
