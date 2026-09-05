@@ -1,7 +1,32 @@
+import { useEffect, useState } from "react";
 import { Activity, ShieldAlert, Stethoscope } from "lucide-react";
 import { SCOPES, formatInr, type Scope, type ScopeId } from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
 import { OperatorAccess } from "./OperatorAccess";
+
+function Clock() {
+  const [now, setNow] = useState<string | null>(null);
+  useEffect(() => {
+    const tick = () =>
+      setNow(
+        new Intl.DateTimeFormat("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+          timeZone: "Asia/Kolkata",
+        }).format(new Date()),
+      );
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <span className="font-mono text-xs text-muted-foreground" aria-label="Local monitor time">
+      {now ?? "--:--:--"} IST
+    </span>
+  );
+}
 
 export function PulseHeader({
   scope,
@@ -37,14 +62,18 @@ export function PulseHeader({
             <Stethoscope className="size-5" />
           </div>
           <div>
-            <p className="text-tick text-muted-foreground">Cyber risk diagnostics</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-tick text-muted-foreground">Cyber risk diagnostics</p>
+              <Clock />
+            </div>
             <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">Cyber Vitals</h1>
             <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">
               A clinical read on cyber exposure — vitals, treatment cost and defence strength for{" "}
-              {scope.blurb.toLowerCase()}.
+              {scope.blurb}.
             </p>
           </div>
         </div>
+
 
         <div className="flex flex-col items-start gap-4 lg:items-end">
         <OperatorAccess operator={operator} onSignIn={onSignIn} onSignOut={onSignOut} />
