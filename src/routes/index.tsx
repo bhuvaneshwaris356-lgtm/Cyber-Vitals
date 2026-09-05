@@ -56,6 +56,8 @@ function Index() {
           <DefenseGauges scope={scope} />
         </section>
 
+        <ControlEffectiveness scope={scope} />
+
         <RiskFilter tier={tier} onTierChange={setTier} scope={scope} />
 
         <div className="grid gap-6 xl:grid-cols-[1.15fr_1fr]">
@@ -64,6 +66,7 @@ function Index() {
         </div>
 
         <ExposureMap scope={scope} tier={tier} />
+
 
         <div className="grid gap-6 xl:grid-cols-[1fr_1.15fr]">
           <VitalsTerminal scope={scope} />
