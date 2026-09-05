@@ -102,8 +102,18 @@ export function PulseHeader({
             ))}
           </div>
 
-          <dl className="flex gap-4 rounded-md border border-graphite-line bg-graphite px-4 py-3">
+          <dl className="flex flex-wrap gap-4 rounded-md border border-graphite-line bg-graphite px-4 py-3">
             <div>
+              <dt className="text-tick text-muted-foreground">Risk score</dt>
+              <dd
+                className="mt-1 font-mono text-sm"
+                style={{ color: critical ? "var(--rust)" : scope.riskIndex >= 50 ? "var(--amber)" : "var(--sage)" }}
+              >
+                {scope.riskIndex}/100
+              </dd>
+            </div>
+            <div className="border-l border-graphite-line pl-4">
+
               <dt className="text-tick text-muted-foreground">Exposure</dt>
               <dd className="mt-1 flex items-center gap-1.5 font-mono text-sm">
                 <ShieldAlert

@@ -31,13 +31,14 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [scopeId, setScopeId] = useState<ScopeId>("enterprise");
+  const [scopeId, setScopeId] = useState<ScopeId>("national");
   const [tier, setTier] = useState<RiskTier>("all");
   const [operator, setOperator] = useState<string | null>(null);
   const scope = useMemo<Scope>(
-    () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[1] as Scope),
+    () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[0] as Scope),
     [scopeId],
   );
+
 
   return (
     <div className="min-h-screen bg-background">
