@@ -31,7 +31,9 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
       const s = (i / steps) * MAX_CR;
       pts.push([xOf(s), yOf(residual(untreated, s))]);
     }
-    const d = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+    const d = pts
+      .map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`)
+      .join(" ");
     return {
       line: d,
       area: `${d} L ${W - PAD.r} ${H - PAD.b} L ${PAD.l} ${H - PAD.b} Z`,
@@ -57,7 +59,11 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
             <label htmlFor="spend" className="text-tick text-muted-foreground">
               Annual treatment spend
             </label>
-            <output htmlFor="spend" className="font-mono text-lg" style={{ color: "var(--copper)" }}>
+            <output
+              htmlFor="spend"
+              className="font-mono text-lg"
+              style={{ color: "var(--copper)" }}
+            >
               {formatInr(spend)}
             </output>
           </div>
@@ -95,7 +101,14 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
               const y = PAD.t + f * (H - PAD.t - PAD.b);
               return (
                 <g key={f}>
-                  <line x1={PAD.l} x2={W - PAD.r} y1={y} y2={y} stroke="var(--graphite-line)" strokeWidth="1" />
+                  <line
+                    x1={PAD.l}
+                    x2={W - PAD.r}
+                    y1={y}
+                    y2={y}
+                    stroke="var(--graphite-line)"
+                    strokeWidth="1"
+                  />
                   <text
                     x={PAD.l - 8}
                     y={y + 3.5}
@@ -140,9 +153,22 @@ export function BudgetSimulator({ scope }: { scope: Scope }) {
               strokeDasharray="3 4"
               strokeWidth="1.2"
             />
-            <circle cx={marker[0]} cy={marker[1]} r="5" fill="var(--vital)" stroke="var(--obsidian)" strokeWidth="2" />
+            <circle
+              cx={marker[0]}
+              cy={marker[1]}
+              r="5"
+              fill="var(--vital)"
+              stroke="var(--obsidian)"
+              strokeWidth="2"
+            />
 
-            <text x={PAD.l} y={H - 12} fill="var(--muted-foreground)" fontSize="9" fontFamily="var(--font-mono)">
+            <text
+              x={PAD.l}
+              y={H - 12}
+              fill="var(--muted-foreground)"
+              fontSize="9"
+              fontFamily="var(--font-mono)"
+            >
               ₹0
             </text>
             <text

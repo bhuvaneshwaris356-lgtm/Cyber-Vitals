@@ -49,7 +49,9 @@ export function RiskFilter({
                 aria-pressed={tier === t}
                 className={cn(
                   "flex items-center gap-2 rounded px-3 py-1.5 font-mono text-xs transition-colors",
-                  tier === t ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60",
+                  tier === t
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:bg-secondary/60",
                 )}
               >
                 {t !== "all" && (
@@ -59,7 +61,9 @@ export function RiskFilter({
                     aria-hidden="true"
                   />
                 )}
-                {t === "all" ? "All" : TIER_LABEL[t].charAt(0) + TIER_LABEL[t].slice(1).toLowerCase()}
+                {t === "all"
+                  ? "All"
+                  : TIER_LABEL[t].charAt(0) + TIER_LABEL[t].slice(1).toLowerCase()}
               </button>
             ))}
           </div>

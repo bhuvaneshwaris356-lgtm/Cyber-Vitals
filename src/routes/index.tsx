@@ -41,7 +41,6 @@ function Index() {
     [scopeId],
   );
 
-
   return (
     <div className="min-h-screen bg-background">
       <PulseHeader
@@ -68,7 +67,6 @@ function Index() {
         </div>
 
         <ExposureMap scope={scope} tier={tier} />
-
 
         <div className="grid gap-6 xl:grid-cols-[1fr_1.15fr]">
           <VitalsTerminal scope={scope} />

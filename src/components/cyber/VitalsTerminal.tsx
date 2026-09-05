@@ -98,7 +98,11 @@ export function VitalsTerminal({ scope }: { scope: Scope }) {
             type="button"
             onClick={() => run(m.chip)}
             className="rounded border px-2.5 py-1.5 font-mono text-[0.6875rem] transition-colors hover:bg-secondary/60"
-            style={{ borderColor: "var(--copper)", color: "var(--copper)", backgroundColor: "var(--ink)" }}
+            style={{
+              borderColor: "var(--copper)",
+              color: "var(--copper)",
+              backgroundColor: "var(--ink)",
+            }}
           >
             {m.chip}
           </button>

@@ -48,7 +48,6 @@ export const SCOPES: Scope[] = [
   },
 ];
 
-
 export type RiskItem = {
   id: string;
   title: string;
@@ -214,15 +213,96 @@ export type Region = {
 };
 
 export const REGIONS: Region[] = [
-  { id: "dl", name: "Delhi NCR", zone: "North", x: 34, y: 24, exposureCr: 148, incidents: 62, severity: "critical" },
-  { id: "mh", name: "Mumbai", zone: "West", x: 26, y: 58, exposureCr: 196, incidents: 74, severity: "critical" },
-  { id: "ka", name: "Bengaluru", zone: "South", x: 38, y: 76, exposureCr: 121, incidents: 51, severity: "elevated" },
-  { id: "tn", name: "Chennai", zone: "South", x: 48, y: 82, exposureCr: 68, incidents: 33, severity: "elevated" },
-  { id: "tg", name: "Hyderabad", zone: "South", x: 40, y: 66, exposureCr: 84, incidents: 39, severity: "elevated" },
-  { id: "wb", name: "Kolkata", zone: "East", x: 66, y: 47, exposureCr: 57, incidents: 28, severity: "guarded" },
-  { id: "gj", name: "Ahmedabad", zone: "West", x: 22, y: 44, exposureCr: 44, incidents: 21, severity: "guarded" },
-  { id: "up", name: "Lucknow", zone: "North", x: 46, y: 33, exposureCr: 36, incidents: 18, severity: "guarded" },
-  { id: "as", name: "Guwahati", zone: "North East", x: 78, y: 36, exposureCr: 19, incidents: 9, severity: "guarded" },
+  {
+    id: "dl",
+    name: "Delhi NCR",
+    zone: "North",
+    x: 34,
+    y: 24,
+    exposureCr: 148,
+    incidents: 62,
+    severity: "critical",
+  },
+  {
+    id: "mh",
+    name: "Mumbai",
+    zone: "West",
+    x: 26,
+    y: 58,
+    exposureCr: 196,
+    incidents: 74,
+    severity: "critical",
+  },
+  {
+    id: "ka",
+    name: "Bengaluru",
+    zone: "South",
+    x: 38,
+    y: 76,
+    exposureCr: 121,
+    incidents: 51,
+    severity: "elevated",
+  },
+  {
+    id: "tn",
+    name: "Chennai",
+    zone: "South",
+    x: 48,
+    y: 82,
+    exposureCr: 68,
+    incidents: 33,
+    severity: "elevated",
+  },
+  {
+    id: "tg",
+    name: "Hyderabad",
+    zone: "South",
+    x: 40,
+    y: 66,
+    exposureCr: 84,
+    incidents: 39,
+    severity: "elevated",
+  },
+  {
+    id: "wb",
+    name: "Kolkata",
+    zone: "East",
+    x: 66,
+    y: 47,
+    exposureCr: 57,
+    incidents: 28,
+    severity: "guarded",
+  },
+  {
+    id: "gj",
+    name: "Ahmedabad",
+    zone: "West",
+    x: 22,
+    y: 44,
+    exposureCr: 44,
+    incidents: 21,
+    severity: "guarded",
+  },
+  {
+    id: "up",
+    name: "Lucknow",
+    zone: "North",
+    x: 46,
+    y: 33,
+    exposureCr: 36,
+    incidents: 18,
+    severity: "guarded",
+  },
+  {
+    id: "as",
+    name: "Guwahati",
+    zone: "North East",
+    x: 78,
+    y: 36,
+    exposureCr: 19,
+    incidents: 9,
+    severity: "guarded",
+  },
 ];
 
 export const COMPLIANCE = [
@@ -304,11 +384,41 @@ export type Control = {
 };
 
 export const CONTROLS: Control[] = [
-  { id: "iam", label: "IAM Hygiene", value: 88, delta: 3.4, note: "Joiner-mover-leaver closure within SLA" },
-  { id: "edr", label: "EDR Coverage", value: 81, delta: 1.9, note: "Agents healthy on tier-0 and tier-1 hosts" },
-  { id: "siem", label: "SIEM / SOC Visibility", value: 67, delta: -2.1, note: "Log sources parsed against use-case catalogue" },
-  { id: "cspm", label: "CSPM Posture", value: 54, delta: 4.6, note: "Cloud accounts free of critical misconfiguration" },
-  { id: "drift", label: "Endpoint Drift", value: 42, delta: -5.2, note: "Builds still matching the golden image" },
+  {
+    id: "iam",
+    label: "IAM Hygiene",
+    value: 88,
+    delta: 3.4,
+    note: "Joiner-mover-leaver closure within SLA",
+  },
+  {
+    id: "edr",
+    label: "EDR Coverage",
+    value: 81,
+    delta: 1.9,
+    note: "Agents healthy on tier-0 and tier-1 hosts",
+  },
+  {
+    id: "siem",
+    label: "SIEM / SOC Visibility",
+    value: 67,
+    delta: -2.1,
+    note: "Log sources parsed against use-case catalogue",
+  },
+  {
+    id: "cspm",
+    label: "CSPM Posture",
+    value: 54,
+    delta: 4.6,
+    note: "Cloud accounts free of critical misconfiguration",
+  },
+  {
+    id: "drift",
+    label: "Endpoint Drift",
+    value: 42,
+    delta: -5.2,
+    note: "Builds still matching the golden image",
+  },
 ];
 
 /** Canned diagnostic answers for the Ask the Monitor terminal. */

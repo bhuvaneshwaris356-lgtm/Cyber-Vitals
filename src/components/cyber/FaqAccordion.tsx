@@ -41,7 +41,8 @@ export function FaqAccordion() {
             )}
             style={{
               borderColor: s.id === tab ? "var(--copper)" : "var(--ink-line)",
-              backgroundColor: s.id === tab ? "color-mix(in oklab, var(--copper) 12%, transparent)" : "var(--ink)",
+              backgroundColor:
+                s.id === tab ? "color-mix(in oklab, var(--copper) 12%, transparent)" : "var(--ink)",
             }}
           >
             {s.label}
@@ -68,7 +69,10 @@ export function FaqAccordion() {
                   aria-controls={`kb-${item.id}`}
                   className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/30 sm:px-5"
                 >
-                  <span className="flex-1 text-sm font-medium" style={{ color: "var(--parchment)" }}>
+                  <span
+                    className="flex-1 text-sm font-medium"
+                    style={{ color: "var(--parchment)" }}
+                  >
                     {item.q}
                   </span>
                   <ChevronDown

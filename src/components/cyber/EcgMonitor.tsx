@@ -5,18 +5,20 @@ import type { Scope } from "@/lib/cyber-data";
 function beatPath(amplitude: number, width: number, mid: number) {
   const u = width / 10;
   const a = amplitude;
-  return [
-    `l ${u * 2} 0`,
-    `q ${u * 0.4} ${-a * 0.22} ${u * 0.8} 0`,
-    `l ${u * 0.6} 0`,
-    `l ${u * 0.35} ${a * 0.3}`,
-    `l ${u * 0.35} ${-a}`,
-    `l ${u * 0.35} ${a * 0.72}`,
-    `l ${u * 0.35} ${-a * 0.12}`,
-    `l ${u * 0.8} 0`,
-    `q ${u * 0.7} ${-a * 0.38} ${u * 1.4} 0`,
-    `l ${width - u * 7.0} 0`,
-  ].join(" ") + ` V ${mid}`;
+  return (
+    [
+      `l ${u * 2} 0`,
+      `q ${u * 0.4} ${-a * 0.22} ${u * 0.8} 0`,
+      `l ${u * 0.6} 0`,
+      `l ${u * 0.35} ${a * 0.3}`,
+      `l ${u * 0.35} ${-a}`,
+      `l ${u * 0.35} ${a * 0.72}`,
+      `l ${u * 0.35} ${-a * 0.12}`,
+      `l ${u * 0.8} 0`,
+      `q ${u * 0.7} ${-a * 0.38} ${u * 1.4} 0`,
+      `l ${width - u * 7.0} 0`,
+    ].join(" ") + ` V ${mid}`
+  );
 }
 
 export function EcgMonitor({ scope }: { scope: Scope }) {
@@ -51,10 +53,7 @@ export function EcgMonitor({ scope }: { scope: Scope }) {
     <div className="relative flex h-full flex-col overflow-hidden rounded-lg panel scanline">
       <div className="flex items-center justify-between border-b border-graphite-line px-4 py-2.5">
         <span className="text-tick text-muted-foreground">Risk ECG · {scope.label}</span>
-        <span
-          className="text-tick"
-          style={{ color: critical ? "var(--alarm)" : "var(--vital)" }}
-        >
+        <span className="text-tick" style={{ color: critical ? "var(--alarm)" : "var(--vital)" }}>
           {bpmJitter} rpm · {critical ? "arrhythmic" : "sinus"}
         </span>
       </div>
