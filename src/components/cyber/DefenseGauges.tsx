@@ -14,8 +14,7 @@ function Gauge({
   const health = invert
     ? Math.max(0, Math.min(1, target / Math.max(value, 0.001)))
     : Math.max(0, Math.min(1, value / target));
-  const color =
-    health >= 0.9 ? "var(--vital)" : health >= 0.65 ? "var(--caution)" : "var(--alarm)";
+  const color = health >= 0.9 ? "var(--vital)" : health >= 0.65 ? "var(--caution)" : "var(--alarm)";
 
   const r = 42;
   const cx = 56;
@@ -24,14 +23,21 @@ function Gauge({
   const end = Math.PI * 2.18;
   const angle = start + (end - start) * health;
   const arc = (a0: number, a1: number) => {
-    const p = (a: number) => `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(2)}`;
+    const p = (a: number) =>
+      `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(2)}`;
     const large = a1 - a0 > Math.PI ? 1 : 0;
     return `M ${p(a0)} A ${r} ${r} 0 ${large} 1 ${p(a1)}`;
   };
 
   return (
     <svg viewBox="0 0 112 104" className="h-24 w-28" aria-hidden="true">
-      <path d={arc(start, end)} fill="none" stroke="var(--graphite-line)" strokeWidth="7" strokeLinecap="round" />
+      <path
+        d={arc(start, end)}
+        fill="none"
+        stroke="var(--graphite-line)"
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
       <path
         d={arc(start, Math.max(angle, start + 0.001))}
         fill="none"
