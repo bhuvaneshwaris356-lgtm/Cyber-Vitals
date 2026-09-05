@@ -17,19 +17,19 @@ export type Scope = {
 
 export const SCOPES: Scope[] = [
   {
-    id: "department",
-    label: "Department",
-    blurb: "Payments & Cards unit",
-    bpm: 68,
-    riskIndex: 34,
-    budgetCr: 12.5,
-    exposureCr: 46,
-    assets: 1840,
+    id: "national",
+    label: "Organization",
+    blurb: "all regulated entities, India",
+    bpm: 121,
+    riskIndex: 82,
+    budgetCr: 940,
+    exposureCr: 5400,
+    assets: 318000,
   },
   {
     id: "enterprise",
-    label: "Enterprise",
-    blurb: "All business lines, India",
+    label: "Business Unit",
+    blurb: "retail banking business unit",
     bpm: 92,
     riskIndex: 61,
     budgetCr: 148,
@@ -37,16 +37,17 @@ export const SCOPES: Scope[] = [
     assets: 42600,
   },
   {
-    id: "national",
-    label: "National grid",
-    blurb: "Regulated sector aggregate",
-    bpm: 121,
-    riskIndex: 82,
-    budgetCr: 940,
-    exposureCr: 5400,
-    assets: 318000,
+    id: "department",
+    label: "Asset",
+    blurb: "the Payments & Cards asset group",
+    bpm: 68,
+    riskIndex: 34,
+    budgetCr: 12.5,
+    exposureCr: 46,
+    assets: 1840,
   },
 ];
+
 
 export type RiskItem = {
   id: string;
