@@ -5,6 +5,8 @@ import { EcgMonitor } from "@/components/cyber/EcgMonitor";
 import { RiskAccordion } from "@/components/cyber/RiskAccordion";
 import { BudgetSimulator } from "@/components/cyber/BudgetSimulator";
 import { DefenseGauges } from "@/components/cyber/DefenseGauges";
+import { ControlEffectiveness } from "@/components/cyber/ControlEffectiveness";
+
 import { ExposureMap } from "@/components/cyber/ExposureMap";
 import { VitalsTerminal } from "@/components/cyber/VitalsTerminal";
 import { ComplianceBadges } from "@/components/cyber/ComplianceBadges";
@@ -31,11 +33,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [scopeId, setScopeId] = useState<ScopeId>("enterprise");
+  const [scopeId, setScopeId] = useState<ScopeId>("national");
   const [tier, setTier] = useState<RiskTier>("all");
   const [operator, setOperator] = useState<string | null>(null);
   const scope = useMemo<Scope>(
-    () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[1] as Scope),
+    () => SCOPES.find((s) => s.id === scopeId) ?? (SCOPES[0] as Scope),
     [scopeId],
   );
 
@@ -54,6 +56,8 @@ function Index() {
           <EcgMonitor scope={scope} />
           <DefenseGauges scope={scope} />
         </section>
+
+        <ControlEffectiveness scope={scope} />
 
         <RiskFilter tier={tier} onTierChange={setTier} scope={scope} />
 
