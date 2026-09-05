@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { REGIONS, SEVERITY_LABEL, formatInr, type Region, type Scope } from "@/lib/cyber-data";
+import {
+  REGIONS,
+  SEVERITY_LABEL,
+  TIER_OF,
+  formatInr,
+  type Region,
+  type RiskTier,
+  type Scope,
+} from "@/lib/cyber-data";
 import { cn } from "@/lib/utils";
 
 const SEV_COLOR: Record<string, string> = {
@@ -8,7 +16,7 @@ const SEV_COLOR: Record<string, string> = {
   guarded: "var(--vital)",
 };
 
-export function ExposureMap({ scope }: { scope: Scope }) {
+export function ExposureMap({ scope, tier = "all" }: { scope: Scope; tier?: RiskTier }) {
   const [active, setActive] = useState<Region>(REGIONS[0] as Region);
   const factor = scope.exposureCr / 620;
   const maxExp = Math.max(...REGIONS.map((r) => r.exposureCr));
@@ -29,13 +37,17 @@ export function ExposureMap({ scope }: { scope: Scope }) {
           {REGIONS.map((r) => {
             const size = 14 + (r.exposureCr / maxExp) * 26;
             const isActive = active.id === r.id;
+            const matches = tier === "all" || TIER_OF[r.severity] === tier;
             return (
               <button
                 key={r.id}
                 type="button"
                 onClick={() => setActive(r)}
                 aria-pressed={isActive}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--vital)] hover:scale-110"
+                className={cn(
+                  "absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--vital)] hover:scale-110",
+                  !matches && "opacity-20",
+                )}
                 style={{ left: `${r.x}%`, top: `${r.y}%`, width: size, height: size }}
                 title={`${r.name} — ${formatInr(r.exposureCr * factor)}`}
               >

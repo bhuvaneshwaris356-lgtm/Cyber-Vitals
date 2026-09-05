@@ -50,6 +50,13 @@
   --color-alarm: var(--alarm);
   --color-caution: var(--caution);
   --color-gold: var(--gold);
+  --color-copper: var(--copper);
+  --color-rust: var(--rust);
+  --color-amber: var(--amber);
+  --color-sage: var(--sage);
+  --color-ink: var(--ink);
+  --color-ink-line: var(--ink-line);
+  --color-parchment: var(--parchment);
 }
 
 :root {
@@ -86,6 +93,15 @@
   --alarm: oklch(0.66 0.2 20);
   --caution: oklch(0.82 0.15 84);
   --gold: oklch(0.85 0.11 92);
+
+  /* copper / clinical tier palette */
+  --copper: #c98a4b;
+  --rust: #b5493f;
+  --amber: #e0a45c;
+  --sage: #8fa998;
+  --ink: #1a1a1d;
+  --ink-line: #2a2a2e;
+  --parchment: #f2ede4;
 
   --shadow-panel: 0 1px 0 0 oklch(1 0 0 / 4%) inset, 0 24px 60px -32px oklch(0 0 0 / 85%);
   --glow-vital: 0 0 24px -2px color-mix(in oklab, var(--vital) 45%, transparent);
